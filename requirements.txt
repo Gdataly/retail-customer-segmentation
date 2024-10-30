@@ -1,0 +1,61 @@
+# Core data processing and analysis
+pandas>=1.3.0
+numpy>=1.20.0
+scipy>=1.7.0
+
+# Machine Learning
+scikit-learn>=1.0.2
+statsmodels>=0.13.0
+
+# Data Visualization
+matplotlib>=3.4.0
+seaborn>=0.11.0
+plotly>=5.13.0
+
+# Jupyter Notebooks
+jupyter>=1.0.0
+notebook>=6.4.0
+ipykernel>=6.0.0
+
+# Data handling and storage
+openpyxl>=3.0.9  # Excel file support
+xlrd>=2.0.1      # Excel file support
+pyarrow>=12.0.0  # Parquet file support
+fastparquet>=0.8.1
+
+# Progress bars
+tqdm>=4.65.0
+
+# Date and time handling
+python-dateutil>=2.8.2
+
+# Statistical analysis
+pingouin>=0.5.2
+
+# Development and testing
+black>=22.3.0    # Code formatting
+flake8>=4.0.1    # Code linting
+pytest>=7.3.1    # Testing
+pylint>=2.14.0   # Code analysis
+
+# Documentation
+sphinx>=4.5.0
+nbconvert>=6.5.0
+
+# Optional but recommended
+joblib>=1.1.0    # Parallel processing
+networkx>=2.8.4  # Network analysis
+pandas-profiling>=3.2.0  # Automated EDA
+
+# Export visualization to different formats
+kaleido>=0.2.1
+
+# Dashboard creation (optional)
+streamlit>=1.22.0
+dash>=2.9.3
+
+# Type checking (optional)
+mypy>=0.981
+
+# Performance optimization
+numba>=0.56.4

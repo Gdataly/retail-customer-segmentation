@@ -1,0 +1,2778 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Contract Analysis - 31d8f95f-1183-a670-8f01-67e2f834794e.pdf</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fa;
+            color: #1a202c;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background: white;
+        }
+
+        /* Premium Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .header .subtitle {
+            font-size: 18px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 20px;
+            margin-right: 10px;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-bottom: 2px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-tab {
+            padding: 20px 40px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #718096;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-tab:hover {
+            color: #4a5568;
+            background: #f7fafc;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: #faf5ff;
+        }
+
+        .tab-section {
+            display: none;
+        }
+
+        .tab-section.active {
+            display: block;
+        }
+
+        /* Executive Summary */
+        .executive-summary {
+            padding: 60px 80px;
+            background: linear-gradient(to bottom, #f8f9fa 0%, white 100%);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #1a202c;
+        }
+
+        .section-description {
+            font-size: 16px;
+            color: #64748b;
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: #1a202c;
+            line-height: 1;
+        }
+
+        .metric-description {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        /* Dependency Graph Section */
+        .graph-section {
+            padding: 60px 80px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        #dependency-graph {
+            width: 100%;
+            height: 700px;
+            background: #fafbfc;
+            border-radius: 16px;
+            border: 2px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .graph-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+        }
+
+        .control-group {
+            margin-bottom: 12px;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .control-group input[type="range"] {
+            width: 180px;
+        }
+
+        .control-group button {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .control-group button:hover {
+            background: #5568d3;
+            transform: translateY(-1px);
+        }
+
+        .graph-legend {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 100;
+        }
+
+        .legend-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .legend-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .graph-tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 1000;
+            max-width: 320px;
+        }
+
+        .tooltip-title {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .tooltip-detail {
+            font-size: 12px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .tooltip-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        /* Clause Analysis Section */
+        .clause-analysis {
+            padding: 60px 80px;
+            background: #fafbfc;
+        }
+
+        .clause-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+
+        .clause-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .clause-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+        }
+
+        .clause-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .risk-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .risk-badge.critical { background: #fee2e2; color: #dc2626; }
+        .risk-badge.high { background: #ffedd5; color: #ea580c; }
+        .risk-badge.medium { background: #fef3c7; color: #f59e0b; }
+        .risk-badge.low { background: #d1fae5; color: #10b981; }
+
+        .strength-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .stars {
+            color: #f59e0b;
+            font-size: 18px;
+        }
+
+        .strength-label {
+            font-size: 13px;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .reasoning-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .reasoning-tab {
+            padding: 12px 24px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #718096;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .reasoning-tab:hover {
+            color: #4a5568;
+        }
+
+        .reasoning-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .reasoning-content {
+            display: none;
+            padding: 25px;
+            background: #f7fafc;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .reasoning-content.active {
+            display: block;
+        }
+
+        .reasoning-text {
+            font-size: 15px;
+            color: #2d3748;
+            line-height: 1.8;
+        }
+
+        .reasoning-highlight {
+            background: #fef5e7;
+            padding: 15px;
+            border-left: 4px solid #d69e2e;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .negotiation-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .negotiation-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .negotiation-text {
+            font-size: 14px;
+            line-height: 1.8;
+            opacity: 0.95;
+        }
+
+        .priority-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-right: 8px;
+        }
+
+        .priority-badge.p0 { background: #fed7d7; color: #c53030; }
+        .priority-badge.p1 { background: #feebc8; color: #c05621; }
+        .priority-badge.p2 { background: #fef5e7; color: #b7791f; }
+
+        /* Commercial Impact */
+        .commercial-impact {
+            padding: 60px 80px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .impact-card {
+            background: linear-gradient(135deg, #f7fafc 0%, white 100%);
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .impact-card h4 {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .impact-value {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1a202c;
+        }
+
+        .impact-description {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        /* Risk Propagation */
+        .risk-propagation {
+            padding: 60px 80px;
+            background: #fafbfc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .critical-path {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #ef4444;
+            margin-bottom: 16px;
+        }
+
+        .critical-path h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+
+        .critical-path p {
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .path-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #fee2e2;
+            color: #dc2626;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        /* Risk Colors */
+        .risk-critical { color: #dc2626; }
+        .risk-high { color: #ea580c; }
+        .risk-medium { color: #f59e0b; }
+        .risk-low { color: #10b981; }
+
+        /* Footer */
+        .footer {
+            padding: 40px 80px;
+            background: #1a202c;
+            color: white;
+            text-align: center;
+        }
+
+        .footer p {
+            opacity: 0.7;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header, .executive-summary, .graph-section, .clause-analysis, .commercial-impact, .risk-propagation {
+                padding: 40px 20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #dependency-graph {
+                height: 500px;
+            }
+
+            .nav-tab {
+                padding: 16px 20px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-shield-alt"></i> Contract Intelligence Analysis</h1>
+                <p class="subtitle">31d8f95f-1183-a670-8f01-67e2f834794e.pdf</p>
+                <span class="badge"><i class="fas fa-brain"></i> Harvey AI Level</span>
+                <span class="badge"><i class="fas fa-project-diagram"></i> Dependency Graph</span>
+                <span class="badge"><i class="fas fa-chart-line"></i> Commercial Impact</span>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab(0)">
+                <i class="fas fa-chart-bar"></i> Overview
+            </button>
+            <button class="nav-tab" onclick="switchTab(1)">
+                <i class="fas fa-project-diagram"></i> Dependency Graph
+            </button>
+            <button class="nav-tab" onclick="switchTab(2)">
+                <i class="fas fa-gavel"></i> Clause Analysis
+            </button>
+            <button class="nav-tab" onclick="switchTab(3)">
+                <i class="fas fa-dollar-sign"></i> Commercial Impact
+            </button>
+            <button class="nav-tab" onclick="switchTab(4)">
+                <i class="fas fa-exclamation-triangle"></i> Risk Propagation
+            </button>
+        </div>
+
+        <!-- Tab 1: Overview -->
+        <div class="tab-section active" id="tab-0">
+            <div class="executive-summary">
+                <h2 class="section-title">Executive Summary</h2>
+                <p class="section-description">
+                    Comprehensive contract analysis with Harvey AI-level legal reasoning,
+                    semantic dependency mapping, and commercial impact quantification.
+                </p>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Contract ID</div>
+                        <div class="metric-value" style="font-size: 18px;">9afca7ef</div>
+                        <div class="metric-description">Unique identifier</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Total Clauses</div>
+                        <div class="metric-value">16</div>
+                        <div class="metric-description">Detected & analyzed</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Dependencies</div>
+                        <div class="metric-value">42</div>
+                        <div class="metric-description">Clause relationships</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Risk Score</div>
+                        <div class="metric-value risk-medium">43</div>
+                        <div class="metric-description">MEDIUM risk level</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Deal Breakers</div>
+                        <div class="metric-value">0</div>
+                        <div class="metric-description">Critical issues</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Missing Clauses</div>
+                        <div class="metric-value">2</div>
+                        <div class="metric-description">Recommended additions</div>
+                    </div>
+                </div>
+
+                
+                <div style="margin-top: 60px;">
+                    <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">Intelligence Report</h3>
+                    <div style="background: white; padding: 32px; border-radius: 16px; border: 1px solid #e2e8f0;">
+                        <div style="white-space: pre-wrap; line-height: 1.8; color: #2d3748;"># DOCUMENT ANALYSIS REPORT
+
+## 1. DOCUMENT SUMMARY
+
+**Document Type:** Business Process Outsourcing (BPO) Call Center Services Agreement  
+**Parties:** Citizens Property Insurance Corporation (Florida governmental entity) and Gatestone & Co. International Inc.  
+**Contract Number:** 21-20-0035-03  
+**Template Version:** V2020-1-03  
+**Pages:** 31 total (partial document provided - pages 1-8, 12-18, 20)  
+**Procurement Method:** Response to Invitation to Negotiate No. 20-0035 issued July 30, 2020
+
+**Primary Purpose:** Outsourcing of call center services including customer service, claims processing (FNOL), and catastrophic response services for Citizens Property Insurance Corporation.
+
+## 2. KEY FINDINGS
+
+### Contract Structure
+- **Term:** 5 years from Effective Date
+- **Maximum Value:** Amount redacted but noted as inclusive for all vendors under ITN 20-0035
+- **Service Types:** Multiple call types including CAT Response, Tier I/II calls, FNOL, and consulting services
+- **Staffing Requirements:** Bilingual capability (English/Spanish) for minimum 5% of call volume, scalable to 10%
+
+### Service Requirements
+- **Activation Timeline:** 30 days from Citizens' request to activate services
+- **Operating Hours:** CAT Response calls require 24/7/365 availability
+- **Call Recording:** 100% storage for minimum 12 months
+- **Quality Assurance:** Monthly calibration sessions and periodic performance reviews
+
+### Financial Terms
+- Monthly payment structure based on accepted services
+- Ear...</div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Tab 2: Dependency Graph -->
+        <div class="tab-section" id="tab-1">
+            <div class="graph-section">
+                <h2 class="section-title">Interactive Clause Dependency Network</h2>
+                <p class="section-description">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>How to use:</strong> Drag nodes to explore relationships.
+                    Hover for details. Edge thickness represents relationship strength (77.6% average).
+                </p>
+
+                <div id="dependency-graph">
+                    <div class="graph-controls">
+                        <div class="control-group">
+                            <label>Confidence Threshold</label>
+                            <input type="range" id="threshold-slider" min="50" max="95" value="65" step="5">
+                            <span id="threshold-value">65%</span>
+                        </div>
+                        <div class="control-group">
+                            <button onclick="resetGraph()">
+                                <i class="fas fa-redo"></i> Reset View
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="graph-legend">
+                        <div class="legend-title">Risk Levels</div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #dc2626;"></div>
+                            <span>Critical</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #ea580c;"></div>
+                            <span>High</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #f59e0b;"></div>
+                            <span>Medium</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background: #10b981;"></div>
+                            <span>Low</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 3: Clause Analysis -->
+        <div class="tab-section" id="tab-2">
+            <div class="clause-analysis">
+                <h2 class="section-title">Detailed Clause Analysis</h2>
+                <p class="section-description">
+                    Harvey AI-level legal reasoning with "Why It Matters" analysis for each clause.
+                </p>
+
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Late Payment</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge medium">MEDIUM</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(0, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(0, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(0, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(0, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-0-0">
+                            <div class="reasoning-text">late payment provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-0-1">
+                            <div class="reasoning-text">Standard contractual provision governing payment aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> MEDIUM risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-0-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-0-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 2 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "late payment"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "late payment"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Hidden Fees</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge high">HIGH</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(1, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(1, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(1, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(1, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-1-0">
+                            <div class="reasoning-text">Contract contains 3 references to "additional charges," "extra fees," or similar language allowing vendor to bill beyond quoted price.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-1-1">
+                            <div class="reasoning-text">Hidden fee provisions create budget uncertainty and can dramatically increase total cost of ownership (TCO). Vendors may use these clauses to extract additional revenue after contract signing.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> MEDIUM-HIGH RISK: 3 fee triggers detected. Without caps, additional charges could exceed original contract value by 20-50%. Estimated budget overrun risk: $50K-$200K annually.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-1-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> BELOW MARKET: Best-practice contracts either (1) prohibit additional fees, or (2) cap them at 10% of annual value.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-1-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p1">P1: HIGH</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">P1 HIGH PRIORITY: Request itemized list of all potential additional charges. Negotiate hard cap at 10% of annual contract value. Insert language: "All fees not explicitly listed in Exhibit A are waived." Get pre-approval process for any charges >$5K.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 3 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "Additional Charge"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "additional cost"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Indemnification</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge high">HIGH</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(2, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(2, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(2, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(2, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-2-0">
+                            <div class="reasoning-text">One party (likely you) must defend and compensate the other party for claims, losses, and damages.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-2-1">
+                            <div class="reasoning-text">UNBALANCED: You bear all indemnity risk while counterparty has no reciprocal obligation. This shifts substantial legal and financial burden to you.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> HIGH RISK: 2 unilateral indemnity provisions detected. Estimated exposure: $500K-$2M+ per indemnity claim (legal fees + settlements).
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-2-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> BELOW MARKET: Only 15% of contracts have unilateral indemnity. Request mutual provisions.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-2-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p1">P1: HIGH</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">P1 HIGH PRIORITY: Request mutual indemnification. Frame as: "We're happy to indemnify you for our IP/actions, but need reciprocal protection." Most vendors accept this as fair.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 2 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "shall indemnify"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "hold harmless"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Ip Ownership</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge critical">CRITICAL</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(3, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(3, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(3, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(3, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-3-0">
+                            <div class="reasoning-text">Defines who owns intellectual property created during the contract (deliverables, code, designs, inventions).</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-3-1">
+                            <div class="reasoning-text">Clear IP ownership prevents future disputes over work product and commercialization rights.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> PROTECTED: You own deliverables and can freely use, modify, and commercialize work product.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-3-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> MARKET STANDARD: 90% of service contracts explicitly assign IP to client.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-3-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p0">P0: CRITICAL</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Confirm assignment includes: (1) all deliverables, (2) derivative works, (3) pre-existing materials incorporated in deliverables. Verify vendor retains no residual rights except for internal tools/methodologies.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 3 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "all right, title and interest"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "all right,
+title, and interest"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Termination For Convenience</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge medium">MEDIUM</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(4, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(4, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(4, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(4, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-4-0">
+                            <div class="reasoning-text">This clause allows either party to terminate the contract without cause, typically with advance notice (60-90 days).</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-4-1">
+                            <div class="reasoning-text">Provides exit flexibility if business needs change or performance issues arise. Protects against vendor lock-in and allows strategic pivots.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> LOW RISK: Ability to exit provides negotiating leverage and limits long-term exposure.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-4-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> ABOVE MARKET: 85% of similar contracts include termination for convenience. Good positioning.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-4-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Confirm notice period is reasonable (60-90 days). Ensure no penalty for early termination.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 3 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "termination had been issued without cause"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "terminates for any reason"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Termination For Cause</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge low">LOW</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(5, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(5, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(5, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(5, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-5-0">
+                            <div class="reasoning-text">termination for cause provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-5-1">
+                            <div class="reasoning-text">Standard contractual provision governing termination aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> LOW risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-5-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-5-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 5 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "terminate this Agreement in whole or in part for cause"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "termination for cause"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Termination Fees</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge high">HIGH</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(6, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(6, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(6, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(6, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-6-0">
+                            <div class="reasoning-text">termination fees provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-6-1">
+                            <div class="reasoning-text">Standard contractual provision governing termination aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> HIGH risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-6-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-6-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p1">P1: HIGH</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 3 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "termination, at Citizens' sole election and without penalty"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "termination, at Citizens’ sole election and without penalty"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Data Return</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge medium">MEDIUM</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(7, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(7, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(7, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(7, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-7-0">
+                            <div class="reasoning-text">data return provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-7-1">
+                            <div class="reasoning-text">Standard contractual provision governing termination aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> MEDIUM risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-7-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-7-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 12 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "Data Export"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "Transition Assistance"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Confidentiality Obligations</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge medium">MEDIUM</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(8, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(8, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(8, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(8, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-8-0">
+                            <div class="reasoning-text">confidentiality obligations provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-8-1">
+                            <div class="reasoning-text">Standard contractual provision governing confidentiality aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> MEDIUM risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-8-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-8-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 43 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "Confidential Information"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "confidential information"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Data Protection</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge high">HIGH</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(9, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(9, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(9, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(9, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-9-0">
+                            <div class="reasoning-text">Governs how personal data is collected, processed, stored, and protected under privacy laws.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-9-1">
+                            <div class="reasoning-text">COMPLIANCE RISK: References outdated Data Protection Act 1998 (pre-GDPR). Must update to GDPR (2018) and include data processing addendum.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> HIGH RISK: Non-compliant data processing could trigger GDPR fines up to €20M or 4% of global turnover. Your organization as data controller bears ultimate liability.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-9-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> CRITICAL GAP: Contract references superseded DPA 1998. GDPR (2018) compliance is legally required.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-9-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p1">P1: HIGH</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">P0 CRITICAL: Request immediate amendment to GDPR-compliant language. Insert Data Processing Addendum. This is a legal compliance requirement, not a negotiation point. Non-compliance creates personal liability for DPO/executives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 1 instance in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "personal information"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Performance Warranty</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge medium">MEDIUM</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(10, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(10, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(10, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(10, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-10-0">
+                            <div class="reasoning-text">performance warranty provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-10-1">
+                            <div class="reasoning-text">Standard contractual provision governing warranties aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> MEDIUM risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-10-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-10-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 1 instance in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "Warranty. Vendor warrants that the Services will be perform"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Jurisdiction Venue</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge low">LOW</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(11, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(11, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(11, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(11, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-11-0">
+                            <div class="reasoning-text">jurisdiction venue provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-11-1">
+                            <div class="reasoning-text">Standard contractual provision governing dispute_resolution aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> LOW risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-11-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-11-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 2 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "exclusive jurisdiction"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "submits to the exclusive jurisdiction"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Regulatory Compliance</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge high">HIGH</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(12, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(12, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(12, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(12, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-12-0">
+                            <div class="reasoning-text">regulatory compliance provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-12-1">
+                            <div class="reasoning-text">Standard contractual provision governing compliance aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> HIGH risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-12-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-12-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p1">P1: HIGH</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 3 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "comply with Florida law"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "applicable law"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Insurance Requirements</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge medium">MEDIUM</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(13, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(13, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(13, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(13, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-13-0">
+                            <div class="reasoning-text">insurance requirements provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-13-1">
+                            <div class="reasoning-text">Standard contractual provision governing insurance aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> MEDIUM risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-13-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-13-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 7 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "INSURANCE POLICY"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "Professional Liability"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Amendments</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge low">LOW</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(14, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(14, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(14, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(14, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-14-0">
+                            <div class="reasoning-text">amendments provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-14-1">
+                            <div class="reasoning-text">Standard contractual provision governing change_management aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> LOW risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-14-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-14-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 12 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "amendment"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "amendment"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+                    <div class="clause-card">
+                        <div class="clause-header">
+                            <div>
+                                <div class="clause-title">Assignment</div>
+                                <div class="strength-rating">
+                                    <div class="stars"></div>
+                                    <span class="strength-label">Not Rated</span>
+                                </div>
+                            </div>
+                            <div class="clause-badges">
+                                <span class="risk-badge medium">MEDIUM</span>
+                            </div>
+                        </div>
+
+                        <div class="reasoning-tabs">
+                            <button class="reasoning-tab active" onclick="showReasoningTab(15, 0)">What It Means</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(15, 1)">Why It Matters</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(15, 2)">Commercial Impact</button>
+                            <button class="reasoning-tab" onclick="showReasoningTab(15, 3)">Negotiation</button>
+                        </div>
+
+                        <div class="reasoning-content active" id="reasoning-15-0">
+                            <div class="reasoning-text">assignment provision defines specific rights and obligations.</div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-15-1">
+                            <div class="reasoning-text">Standard contractual provision governing change_management aspects of the relationship.</div>
+                            
+                                <div class="reasoning-highlight">
+                                    <strong>💰 Commercial Impact:</strong> MEDIUM risk profile based on industry standards and commercial practice.
+                                </div>
+                            
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-15-2">
+                            <div class="reasoning-text">
+                                <strong>Market Position:</strong> Analyzed against industry standards for similar contracts.<br><br>
+                                <strong>Strength vs Industry:</strong> [object Object]/5 stars 
+                            </div>
+                        </div>
+
+                        <div class="reasoning-content" id="reasoning-15-3">
+                            
+                                <div class="negotiation-box">
+                                    <div class="negotiation-title">
+                                        <span class="priority-badge p2">P2: MEDIUM</span>
+                                        Negotiation Strategy
+                                    </div>
+                                    <div class="negotiation-text">Review for alignment with company risk tolerance and deal objectives.</div>
+                                </div>
+                            
+                        </div>
+
+                        
+                            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                                <div style="font-size: 13px; color: #718096; margin-bottom: 10px; font-weight: 600;">
+                                    Found 3 instances in contract:
+                                </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "shall not sell, assign"
+                                    </div>
+                                
+                                    <div style="background: #f7fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 13px; color: #4a5568; font-family: monospace;">
+                                        "Assignments. This Agreement"
+                                    </div>
+                                
+                            </div>
+                        
+                    </div>
+                
+            </div>
+        </div>
+
+        <!-- Tab 4: Commercial Impact -->
+        <div class="tab-section" id="tab-3">
+            <div class="commercial-impact">
+                <h2 class="section-title">Commercial Impact Analysis</h2>
+                <p class="section-description">
+                    Quantified financial exposure and opportunity cost based on contract clauses.
+                </p>
+
+                <div class="impact-grid">
+                    <div class="impact-card">
+                        <h4>Total Exposure</h4>
+                        <div class="impact-value">$250K</div>
+                        <div class="impact-description">
+                            Cumulative financial risk from unfavorable clauses and missing protections.
+                        </div>
+                    </div>
+                    <div class="impact-card">
+                        <h4>Cash Flow Impact</h4>
+                        <div class="impact-value">$0</div>
+                        <div class="impact-description">
+                            Potential working capital impact from payment terms and hidden fees.
+                        </div>
+                    </div>
+                    <div class="impact-card">
+                        <h4>Opportunity Cost</h4>
+                        <div class="impact-value">$0</div>
+                        <div class="impact-description">
+                            Lost value from restrictive terms (non-compete, IP ownership, etc.).
+                        </div>
+                    </div>
+                    <div class="impact-card">
+                        <h4>Risk Mitigation Value</h4>
+                        <div class="impact-value">$0</div>
+                        <div class="impact-description">
+                            Estimated value of recommended risk mitigation strategies.
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 60px;">
+                    <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">Impact Breakdown</h3>
+                    
+                        <div style="background: white; padding: 24px; border-radius: 12px; margin-bottom: 16px; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 16px; color: #1a202c;">Hidden Fees</div>
+                                    <div style="font-size: 14px; color: #64748b; margin-top: 4px;">undefined</div>
+                                </div>
+                                <div style="font-size: 20px; font-weight: 800; color: #dc2626;">
+                                    $0
+                                </div>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 5: Risk Propagation -->
+        <div class="tab-section" id="tab-4">
+            <div class="risk-propagation">
+                <h2 class="section-title">Risk Propagation Analysis</h2>
+                <p class="section-description">
+                    Critical paths showing how high-risk clauses influence each other,
+                    potentially amplifying overall contract risk.
+                </p>
+
+                
+                    
+                        <div class="critical-path">
+                            <span class="path-badge">Path 1</span>
+                            <span class="path-badge">Combined Risk: 328</span>
+                            <h4>Data Protection → Regulatory Compliance</h4>
+                            <p>
+                                These clauses are semantically related with 95% confidence.
+                                When combined, they create elevated risk exposure requiring immediate attention.
+                            </p>
+                        </div>
+                    
+                        <div class="critical-path">
+                            <span class="path-badge">Path 2</span>
+                            <span class="path-badge">Combined Risk: 283</span>
+                            <h4>Indemnification → Regulatory Compliance</h4>
+                            <p>
+                                These clauses are semantically related with 94% confidence.
+                                When combined, they create elevated risk exposure requiring immediate attention.
+                            </p>
+                        </div>
+                    
+                        <div class="critical-path">
+                            <span class="path-badge">Path 3</span>
+                            <span class="path-badge">Combined Risk: 267</span>
+                            <h4>Hidden Fees → Regulatory Compliance</h4>
+                            <p>
+                                These clauses are semantically related with 78% confidence.
+                                When combined, they create elevated risk exposure requiring immediate attention.
+                            </p>
+                        </div>
+                    
+                        <div class="critical-path">
+                            <span class="path-badge">Path 4</span>
+                            <span class="path-badge">Combined Risk: 245</span>
+                            <h4>Indemnification → Data Protection</h4>
+                            <p>
+                                These clauses are semantically related with 100% confidence.
+                                When combined, they create elevated risk exposure requiring immediate attention.
+                            </p>
+                        </div>
+                    
+                        <div class="critical-path">
+                            <span class="path-badge">Path 5</span>
+                            <span class="path-badge">Combined Risk: 229</span>
+                            <h4>Hidden Fees → Data Protection</h4>
+                            <p>
+                                These clauses are semantically related with 79% confidence.
+                                When combined, they create elevated risk exposure requiring immediate attention.
+                            </p>
+                        </div>
+                    
+                
+
+                <div style="margin-top: 60px;">
+                    <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">Top Risk Nodes</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        
+                            <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">Regulatory Compliance</div>
+                                <div style="font-size: 32px; font-weight: 800; color: #dc2626; margin: 12px 0;">183</div>
+                                <div style="font-size: 13px; color: #64748b;">
+                                    Base Risk: 75<br>
+                                    Propagated: 361<br>
+                                    Influenced By: 10 clauses
+                                </div>
+                            </div>
+                        
+                            <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">Data Protection</div>
+                                <div style="font-size: 32px; font-weight: 800; color: #dc2626; margin: 12px 0;">145</div>
+                                <div style="font-size: 13px; color: #64748b;">
+                                    Base Risk: 75<br>
+                                    Propagated: 234<br>
+                                    Influenced By: 6 clauses
+                                </div>
+                            </div>
+                        
+                            <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">Jurisdiction Venue</div>
+                                <div style="font-size: 32px; font-weight: 800; color: #dc2626; margin: 12px 0;">105</div>
+                                <div style="font-size: 13px; color: #64748b;">
+                                    Base Risk: 25<br>
+                                    Propagated: 266<br>
+                                    Influenced By: 7 clauses
+                                </div>
+                            </div>
+                        
+                            <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">Ip Ownership</div>
+                                <div style="font-size: 32px; font-weight: 800; color: #dc2626; margin: 12px 0;">104</div>
+                                <div style="font-size: 13px; color: #64748b;">
+                                    Base Risk: 100<br>
+                                    Propagated: 12<br>
+                                    Influenced By: 1 clause
+                                </div>
+                            </div>
+                        
+                            <div style="background: white; padding: 24px; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">Indemnification</div>
+                                <div style="font-size: 32px; font-weight: 800; color: #dc2626; margin: 12px 0;">100</div>
+                                <div style="font-size: 13px; color: #64748b;">
+                                    Base Risk: 75<br>
+                                    Propagated: 84<br>
+                                    Influenced By: 2 clauses
+                                </div>
+                            </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>
+                <i class="fas fa-robot"></i> Generated with Harvey AI-Level Contract Intelligence<br>
+                Powered by Semantic AI • Cosine Similarity • Force-Directed Graphs • Legal Reasoning Engine
+            </p>
+        </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="graph-tooltip" id="tooltip"></div>
+
+    <script>
+        // Embedded graph data
+        const graphData = {
+  "nodes": [
+    {
+      "id": "late_payment",
+      "category": "payment",
+      "risk": "MEDIUM",
+      "confidence": 0.75,
+      "label": "Late Payment",
+      "found": true,
+      "matches": 2
+    },
+    {
+      "id": "hidden_fees",
+      "category": "payment",
+      "risk": "HIGH",
+      "confidence": 0.75,
+      "label": "Hidden Fees",
+      "found": true,
+      "matches": 3
+    },
+    {
+      "id": "indemnification",
+      "category": "liability",
+      "risk": "HIGH",
+      "confidence": 0.75,
+      "label": "Indemnification",
+      "found": true,
+      "matches": 2
+    },
+    {
+      "id": "ip_ownership",
+      "category": "intellectual_property",
+      "risk": "CRITICAL",
+      "confidence": 0.75,
+      "label": "Ip Ownership",
+      "found": true,
+      "matches": 3
+    },
+    {
+      "id": "termination_for_convenience",
+      "category": "termination",
+      "risk": "MEDIUM",
+      "confidence": 0.75,
+      "label": "Termination For Convenience",
+      "found": true,
+      "matches": 3
+    },
+    {
+      "id": "termination_for_cause",
+      "category": "termination",
+      "risk": "LOW",
+      "confidence": 0.75,
+      "label": "Termination For Cause",
+      "found": true,
+      "matches": 5
+    },
+    {
+      "id": "termination_fees",
+      "category": "termination",
+      "risk": "HIGH",
+      "confidence": 0.75,
+      "label": "Termination Fees",
+      "found": true,
+      "matches": 3
+    },
+    {
+      "id": "data_return",
+      "category": "termination",
+      "risk": "MEDIUM",
+      "confidence": 0.75,
+      "label": "Data Return",
+      "found": true,
+      "matches": 12
+    },
+    {
+      "id": "confidentiality_obligations",
+      "category": "confidentiality",
+      "risk": "MEDIUM",
+      "confidence": 0.75,
+      "label": "Confidentiality Obligations",
+      "found": true,
+      "matches": 43
+    },
+    {
+      "id": "data_protection",
+      "category": "confidentiality",
+      "risk": "HIGH",
+      "confidence": 0.75,
+      "label": "Data Protection",
+      "found": true,
+      "matches": 1
+    },
+    {
+      "id": "performance_warranty",
+      "category": "warranties",
+      "risk": "MEDIUM",
+      "confidence": 0.75,
+      "label": "Performance Warranty",
+      "found": true,
+      "matches": 1
+    },
+    {
+      "id": "jurisdiction_venue",
+      "category": "dispute_resolution",
+      "risk": "LOW",
+      "confidence": 0.75,
+      "label": "Jurisdiction Venue",
+      "found": true,
+      "matches": 2
+    },
+    {
+      "id": "regulatory_compliance",
+      "category": "compliance",
+      "risk": "HIGH",
+      "confidence": 0.75,
+      "label": "Regulatory Compliance",
+      "found": true,
+      "matches": 3
+    },
+    {
+      "id": "insurance_requirements",
+      "category": "insurance",
+      "risk": "MEDIUM",
+      "confidence": 0.75,
+      "label": "Insurance Requirements",
+      "found": true,
+      "matches": 7
+    },
+    {
+      "id": "amendments",
+      "category": "change_management",
+      "risk": "LOW",
+      "confidence": 0.75,
+      "label": "Amendments",
+      "found": true,
+      "matches": 12
+    },
+    {
+      "id": "assignment",
+      "category": "change_management",
+      "risk": "MEDIUM",
+      "confidence": 0.75,
+      "label": "Assignment",
+      "found": true,
+      "matches": 3
+    }
+  ],
+  "links": [
+    {
+      "source": "late_payment",
+      "target": "indemnification",
+      "strength": 0.905,
+      "confidence": 0.812,
+      "type": "strong_dependency"
+    },
+    {
+      "source": "late_payment",
+      "target": "data_protection",
+      "strength": 0.901,
+      "confidence": 0.81,
+      "type": "strong_dependency"
+    },
+    {
+      "source": "late_payment",
+      "target": "jurisdiction_venue",
+      "strength": 0.825,
+      "confidence": 0.78,
+      "type": "dependency"
+    },
+    {
+      "source": "late_payment",
+      "target": "regulatory_compliance",
+      "strength": 0.807,
+      "confidence": 0.773,
+      "type": "dependency"
+    },
+    {
+      "source": "late_payment",
+      "target": "hidden_fees",
+      "strength": 0.757,
+      "confidence": 0.753,
+      "type": "dependency"
+    },
+    {
+      "source": "hidden_fees",
+      "target": "jurisdiction_venue",
+      "strength": 0.849,
+      "confidence": 0.789,
+      "type": "dependency"
+    },
+    {
+      "source": "hidden_fees",
+      "target": "indemnification",
+      "strength": 0.813,
+      "confidence": 0.775,
+      "type": "dependency"
+    },
+    {
+      "source": "hidden_fees",
+      "target": "data_protection",
+      "strength": 0.788,
+      "confidence": 0.765,
+      "type": "dependency"
+    },
+    {
+      "source": "hidden_fees",
+      "target": "regulatory_compliance",
+      "strength": 0.779,
+      "confidence": 0.761,
+      "type": "dependency"
+    },
+    {
+      "source": "hidden_fees",
+      "target": "assignment",
+      "strength": 0.759,
+      "confidence": 0.754,
+      "type": "dependency"
+    },
+    {
+      "source": "indemnification",
+      "target": "data_protection",
+      "strength": 1,
+      "confidence": 0.85,
+      "type": "strong_dependency"
+    },
+    {
+      "source": "indemnification",
+      "target": "regulatory_compliance",
+      "strength": 0.942,
+      "confidence": 0.827,
+      "type": "strong_dependency"
+    },
+    {
+      "source": "indemnification",
+      "target": "insurance_requirements",
+      "strength": 0.815,
+      "confidence": 0.776,
+      "type": "dependency"
+    },
+    {
+      "source": "ip_ownership",
+      "target": "confidentiality_obligations",
+      "strength": 0.784,
+      "confidence": 0.764,
+      "type": "dependency"
+    },
+    {
+      "source": "ip_ownership",
+      "target": "assignment",
+      "strength": 0.724,
+      "confidence": 0.74,
+      "type": "correlation"
+    },
+    {
+      "source": "ip_ownership",
+      "target": "termination_for_convenience",
+      "strength": 0.716,
+      "confidence": 0.737,
+      "type": "correlation"
+    },
+    {
+      "source": "ip_ownership",
+      "target": "jurisdiction_venue",
+      "strength": 0.711,
+      "confidence": 0.734,
+      "type": "correlation"
+    },
+    {
+      "source": "ip_ownership",
+      "target": "regulatory_compliance",
+      "strength": 0.695,
+      "confidence": 0.728,
+      "type": "correlation"
+    },
+    {
+      "source": "termination_for_convenience",
+      "target": "termination_for_cause",
+      "strength": 0.768,
+      "confidence": 0.757,
+      "type": "dependency"
+    },
+    {
+      "source": "termination_for_convenience",
+      "target": "assignment",
+      "strength": 0.745,
+      "confidence": 0.748,
+      "type": "correlation"
+    },
+    {
+      "source": "termination_for_convenience",
+      "target": "amendments",
+      "strength": 0.688,
+      "confidence": 0.725,
+      "type": "correlation"
+    },
+    {
+      "source": "termination_for_convenience",
+      "target": "insurance_requirements",
+      "strength": 0.658,
+      "confidence": 0.713,
+      "type": "correlation"
+    },
+    {
+      "source": "termination_for_cause",
+      "target": "confidentiality_obligations",
+      "strength": 0.694,
+      "confidence": 0.728,
+      "type": "correlation"
+    },
+    {
+      "source": "confidentiality_obligations",
+      "target": "data_protection",
+      "strength": 0.786,
+      "confidence": 0.764,
+      "type": "dependency"
+    },
+    {
+      "source": "confidentiality_obligations",
+      "target": "insurance_requirements",
+      "strength": 0.708,
+      "confidence": 0.733,
+      "type": "correlation"
+    },
+    {
+      "source": "confidentiality_obligations",
+      "target": "amendments",
+      "strength": 0.707,
+      "confidence": 0.733,
+      "type": "correlation"
+    },
+    {
+      "source": "data_protection",
+      "target": "regulatory_compliance",
+      "strength": 0.949,
+      "confidence": 0.829,
+      "type": "strong_dependency"
+    },
+    {
+      "source": "data_protection",
+      "target": "jurisdiction_venue",
+      "strength": 0.809,
+      "confidence": 0.774,
+      "type": "dependency"
+    },
+    {
+      "source": "performance_warranty",
+      "target": "regulatory_compliance",
+      "strength": 0.853,
+      "confidence": 0.791,
+      "type": "strong_dependency"
+    },
+    {
+      "source": "performance_warranty",
+      "target": "jurisdiction_venue",
+      "strength": 0.802,
+      "confidence": 0.771,
+      "type": "dependency"
+    },
+    {
+      "source": "performance_warranty",
+      "target": "data_protection",
+      "strength": 0.779,
+      "confidence": 0.762,
+      "type": "dependency"
+    },
+    {
+      "source": "performance_warranty",
+      "target": "assignment",
+      "strength": 0.775,
+      "confidence": 0.76,
+      "type": "dependency"
+    },
+    {
+      "source": "performance_warranty",
+      "target": "late_payment",
+      "strength": 0.753,
+      "confidence": 0.751,
+      "type": "dependency"
+    },
+    {
+      "source": "jurisdiction_venue",
+      "target": "regulatory_compliance",
+      "strength": 0.831,
+      "confidence": 0.782,
+      "type": "dependency"
+    },
+    {
+      "source": "insurance_requirements",
+      "target": "jurisdiction_venue",
+      "strength": 0.69,
+      "confidence": 0.726,
+      "type": "correlation"
+    },
+    {
+      "source": "insurance_requirements",
+      "target": "regulatory_compliance",
+      "strength": 0.684,
+      "confidence": 0.724,
+      "type": "correlation"
+    },
+    {
+      "source": "insurance_requirements",
+      "target": "amendments",
+      "strength": 0.684,
+      "confidence": 0.724,
+      "type": "correlation"
+    },
+    {
+      "source": "amendments",
+      "target": "ip_ownership",
+      "strength": 0.677,
+      "confidence": 0.721,
+      "type": "correlation"
+    },
+    {
+      "source": "amendments",
+      "target": "regulatory_compliance",
+      "strength": 0.671,
+      "confidence": 0.718,
+      "type": "correlation"
+    },
+    {
+      "source": "assignment",
+      "target": "regulatory_compliance",
+      "strength": 0.788,
+      "confidence": 0.765,
+      "type": "dependency"
+    },
+    {
+      "source": "assignment",
+      "target": "jurisdiction_venue",
+      "strength": 0.765,
+      "confidence": 0.756,
+      "type": "dependency"
+    },
+    {
+      "source": "assignment",
+      "target": "data_protection",
+      "strength": 0.756,
+      "confidence": 0.753,
+      "type": "dependency"
+    }
+  ]
+};
+
+        // Tab switching
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const sections = document.querySelectorAll('.tab-section');
+
+            tabs.forEach((tab, i) => {
+                if (i === index) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            sections.forEach((section, i) => {
+                if (i === index) {
+                    section.classList.add('active');
+                } else {
+                    section.classList.remove('active');
+                }
+            });
+
+            // Initialize graph when switching to dependency tab
+            if (index === 1 && !window.graphInitialized) {
+                initializeGraph();
+                window.graphInitialized = true;
+            }
+        }
+
+        // Reasoning tab switching
+        function showReasoningTab(clauseIndex, tabIndex) {
+            // Find the parent clause card
+            const clauseCards = document.querySelectorAll('#tab-2 .clause-card');
+            const clauseCard = clauseCards[clauseIndex];
+
+            if (!clauseCard) return;
+
+            const tabs = clauseCard.querySelectorAll('.reasoning-tab');
+            const contents = clauseCard.querySelectorAll('.reasoning-content');
+
+            tabs.forEach((tab, i) => {
+                if (i === tabIndex) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            contents.forEach((content, i) => {
+                if (i === tabIndex) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // D3.js Visualization (lazy loaded)
+        let simulation, svg, g;
+
+        function initializeGraph() {
+            const width = document.getElementById('dependency-graph').clientWidth;
+            const height = 700;
+
+            svg = d3.select('#dependency-graph')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            g = svg.append('g');
+
+            const zoom = d3.zoom()
+                .scaleExtent([0.3, 3])
+                .on('zoom', (event) => {
+                    g.attr('transform', event.transform);
+                });
+
+            svg.call(zoom);
+
+            const colorScale = {
+                'CRITICAL': '#dc2626',
+                'HIGH': '#ea580c',
+                'MEDIUM': '#f59e0b',
+                'LOW': '#10b981',
+                'undefined': '#94a3b8'
+            };
+
+            simulation = d3.forceSimulation(graphData.nodes)
+                .force('link', d3.forceLink(graphData.links)
+                    .id(d => d.id)
+                    .distance(d => 150 / d.strength))
+                .force('charge', d3.forceManyBody().strength(-400))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(40));
+
+            const link = g.append('g')
+                .selectAll('line')
+                .data(graphData.links)
+                .enter()
+                .append('line')
+                .attr('stroke', '#cbd5e1')
+                .attr('stroke-width', d => Math.max(1, d.strength * 5))
+                .attr('stroke-opacity', d => 0.3 + (d.confidence * 0.5));
+
+            const node = g.append('g')
+                .selectAll('circle')
+                .data(graphData.nodes)
+                .enter()
+                .append('circle')
+                .attr('r', d => d.found ? 25 : 18)
+                .attr('fill', d => colorScale[d.risk] || colorScale['undefined'])
+                .attr('stroke', 'white')
+                .attr('stroke-width', 3)
+                .style('cursor', 'pointer')
+                .call(drag(simulation))
+                .on('mouseover', handleMouseOver)
+                .on('mouseout', handleMouseOut);
+
+            const label = g.append('g')
+                .selectAll('text')
+                .data(graphData.nodes)
+                .enter()
+                .append('text')
+                .text(d => d.label)
+                .attr('font-size', 11)
+                .attr('font-weight', 600)
+                .attr('fill', '#1a202c')
+                .attr('text-anchor', 'middle')
+                .attr('dy', 40)
+                .style('pointer-events', 'none')
+                .style('user-select', 'none');
+
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node
+                    .attr('cx', d => d.x)
+                    .attr('cy', d => d.y);
+
+                label
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y);
+            });
+
+            function drag(simulation) {
+                function dragstarted(event) {
+                    if (!event.active) simulation.alphaTarget(0.3).restart();
+                    event.subject.fx = event.subject.x;
+                    event.subject.fy = event.subject.y;
+                }
+
+                function dragged(event) {
+                    event.subject.fx = event.x;
+                    event.subject.fy = event.y;
+                }
+
+                function dragended(event) {
+                    if (!event.active) simulation.alphaTarget(0);
+                    event.subject.fx = null;
+                    event.subject.fy = null;
+                }
+
+                return d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended);
+            }
+
+            const tooltip = d3.select('#tooltip');
+
+            function handleMouseOver(event, d) {
+                const connections = graphData.links.filter(l =>
+                    l.source.id === d.id || l.target.id === d.id
+                ).length;
+
+                tooltip
+                    .style('opacity', 1)
+                    .style('left', (event.pageX + 15) + 'px')
+                    .style('top', (event.pageY - 10) + 'px')
+                    .html(`
+                        <div class="tooltip-title">${d.label}</div>
+                        <div class="tooltip-detail">
+                            Risk: <strong>${d.risk}</strong><br>
+                            Connections: <strong>${connections}</strong><br>
+                            Found: <strong>${d.found ? 'Yes' : 'No'}</strong>
+                            ${d.matches > 0 ? '<br>Matches: <strong>' + d.matches + '</strong>' : ''}
+                        </div>
+                        <div class="tooltip-badge">${d.category}</div>
+                    `);
+
+                d3.select(event.currentTarget)
+                    .transition()
+                    .duration(200)
+                    .attr('r', d.found ? 30 : 22);
+            }
+
+            function handleMouseOut(event, d) {
+                tooltip.style('opacity', 0);
+
+                d3.select(event.currentTarget)
+                    .transition()
+                    .duration(200)
+                    .attr('r', d.found ? 25 : 18);
+            }
+
+            document.getElementById('threshold-slider').addEventListener('input', (e) => {
+                const threshold = e.target.value;
+                document.getElementById('threshold-value').textContent = threshold + '%';
+
+                link.style('display', d =>
+                    d.confidence >= threshold / 100 ? 'block' : 'none'
+                );
+            });
+        }
+
+        function resetGraph() {
+            if (svg) {
+                svg.transition()
+                    .duration(750)
+                    .call(d3.zoom().transform, d3.zoomIdentity);
+            }
+        }
+    </script>
+</body>
+</html>
